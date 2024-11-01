@@ -1,50 +1,87 @@
-# React + TypeScript + Vite
+# Config
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Vào https://firebase.google.com/. Vào **Project settings**
 
-Currently, two official plugins are available:
+<img src="https://github.com/user-attachments/assets/95bee1ac-76db-40cc-a7b2-fd28e8c8ca6a" width="500px" >
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Chúng ta cần phải cài đặt thư viện firebase vào dự án
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+npm install firebase
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- Copy đoạn code trong phần tutorial ở phía dưới
 
 ```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+const firebaseConfig = {
+  apiKey: "AIzaSyCIrq3jrqeSHOOC-J_g31FLbHh9fhRXtTo",
+  authDomain: "chat-app-ca301.firebaseapp.com",
+  projectId: "chat-app-ca301",
+  storageBucket: "chat-app-ca301.appspot.com",
+  messagingSenderId: "365404581577",
+  appId: "1:365404581577:web:4d0135bfb9eb4819852718",
+  measurementId: "G-E5G4FTZGEC"
+};
 ```
+
+- Ta config trong file `config.js`
+
+```js
+import firebase from "firebase/app";
+
+import "firebase/analytics";
+import "firebase/auth";
+import "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCIrq3jrqeSHOOC-J_g31FLbHh9fhRXtTo",
+  authDomain: "chat-app-ca301.firebaseapp.com",
+  projectId: "chat-app-ca301",
+  storageBucket: "chat-app-ca301.appspot.com",
+  messagingSenderId: "365404581577",
+  appId: "1:365404581577:web:4d0135bfb9eb4819852718",
+  measurementId: "G-E5G4FTZGEC",
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+export { db, auth };
+export default firebase;
+```
+
+- Ta vào phần **Authentication** trong firebase
+
+<img src="https://github.com/user-attachments/assets/5fde0fd5-9f28-4970-8c3d-d4c8e5f33817" width="500px" >
+
+Tiếp theo ta vào trang https://developers.facebook.com/, rồi tạo ứng dụng. Sau khi tạo xong ta vào phần **Cài đặt ứng dụng** -> **Thông tin cơ bản**
+
+<img src="https://github.com/user-attachments/assets/44af4ce8-287e-43f3-b3f2-8c4ec2592c8f" width="300px" >
+
+<br/>
+
+<img src="https://github.com/user-attachments/assets/5a6293a8-c618-437e-9946-33d2f4759178" width="600px" >
+
+Xong đó vào lấy **ID ứng dụng** và **Khóa bí mật của ứng dụng** paste vào đây
+
+<img src="https://github.com/user-attachments/assets/c6ab3011-d501-474a-b9f3-8c71a3e1c14f" width="500px" >
+
+Đồng thời copy URI này. Vào phần **Trường hợp sử dụng** để chỉnh sửa
+
+<img src="https://github.com/user-attachments/assets/35e0a68d-e267-4c61-95fe-f827be2e6308" width="500px" >
+
+<br/>
+
+<img src="https://github.com/user-attachments/assets/9f6b706b-809e-43d6-852c-50dda7b95eb3" width="400px" >
+
+Vào **URI chuyển hướng OAuth hợp lệ** paste ra
+
+<img src="https://github.com/user-attachments/assets/0def4d3a-7770-4f74-9b5b-f0146d4d92d8" width="500px" >
+
+Đến khi hiển thị như này là **thành công**
+
+<img src="https://github.com/user-attachments/assets/41e053a8-cb1c-4d64-ab78-2817f4487f94" width="300px" >
