@@ -85,3 +85,11 @@ Vào **URI chuyển hướng OAuth hợp lệ** paste ra
 Đến khi hiển thị như này là **thành công**
 
 <img src="https://github.com/user-attachments/assets/41e053a8-cb1c-4d64-ab78-2817f4487f94" width="300px" >
+
+# Use
+
+Sử dụng `auth.signInWithPopup(fbProvider)` để đăng nhập
+
+Sử dụng `auth.onAuthStateChanged((user) => {}` để lấy dữ liệu người dùng
+
+Tham khảo tại [đây](https://github.com/CUNGVANTHANG/Workflow/tree/master/module/reactjs-login-facebook-firebase/src)
