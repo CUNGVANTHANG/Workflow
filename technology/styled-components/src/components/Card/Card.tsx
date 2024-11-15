@@ -55,7 +55,7 @@ const UserAvatar = styled.img`
 const UserName = styled.span`
     font-size: 16px;
     font-weight: 300;
-    color: #333;
+    color: ${props => props.theme.colors.primary};;
 `
 
 const CardFooter = styled.div`
