@@ -1,32 +1,25 @@
 import Form from '@rjsf/core';
-import { RJSFSchema } from '@rjsf/utils';
+import { ArrayFieldTemplateItemType, RJSFSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
-import './App.css';
 
 const schema: RJSFSchema = {
-  title: 'Test form',
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string',
-    },
-    age: {
-      type: 'number',
-    },
+  type: 'array',
+  items: {
+    type: 'string',
   },
 };
 
+function ArrayFieldItemTemplate(props: ArrayFieldTemplateItemType) {
+  const { children, className } = props;
+  return <div className={className}>{children}</div>;
+}
 
-function App() {
+const App = () => {
   return (
     <div className='container'>
-      <h1>Test Form</h1>
-      <Form
-        schema={schema}
-        validator={validator}
-      />
+      <Form schema={schema} validator={validator} templates={{ ArrayFieldItemTemplate }} />
     </div>
   );
-}
+};
 
 export default App;
