@@ -292,5 +292,54 @@ export default App;
 ## II. Advanced Customization
 ### 1. Custom Templates
 
+- [ArrayFieldTemplate](https://rjsf-team.github.io/react-jsonschema-form/docs/advanced-customization/custom-templates#arrayfieldtemplate)
+
+![img](https://github.com/user-attachments/assets/35dd17f9-7979-4fd3-ab52-04798eb103b1)
+![img](https://github.com/user-attachments/assets/02fcaf38-d280-455e-b222-893141a447d9)
+
+<details>
+  <summary>Source code</summary>
+
+```tsx
+import Form from '@rjsf/core';
+import { ArrayFieldTemplateProps, RJSFSchema } from '@rjsf/utils';
+import validator from '@rjsf/validator-ajv8';
+import './App.css';
+import { VscAdd } from "react-icons/vsc";
+
+const schema: RJSFSchema = {
+  type: 'array',
+  items: {
+    type: 'string',
+  },
+};
+
+function ArrayFieldTemplate(props: ArrayFieldTemplateProps) {
+  return (
+    <div>
+      {props.items.map((element) => element.children)}
+      {props.canAdd && <button type='button' onClick={props.onAddClick}><VscAdd /></button>}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className='container'>
+      <h1>Test Form</h1>
+      <Form
+        schema={schema}
+        validator={validator}
+        templates={{ ArrayFieldTemplate }}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+</details>
+
+- [ArrayFieldDescriptionTemplate](https://rjsf-team.github.io/react-jsonschema-form/docs/advanced-customization/custom-templates#arrayfielddescriptiontemplate)
 
 
