@@ -56,7 +56,10 @@ Hiển thị thông báo động:
 
 - Nếu không, hiển thị thông báo "Drag 'n' drop some files here, or click to select files".
 
+Kết quả:
+
 ![image](https://github.com/user-attachments/assets/f145b38d-0e5d-4938-9b05-7e322793ec51)
+![image](https://github.com/user-attachments/assets/4d7ad3cf-6076-4791-ab80-afed152e2609)
 
 **2. Sử dụng components**
 
@@ -77,7 +80,10 @@ import Dropzone from "react-dropzone";
 
 hoạt động tương tự sử dụng hook
 
+Kết quả:
+
 ![image](https://github.com/user-attachments/assets/f145b38d-0e5d-4938-9b05-7e322793ec51)
+![image](https://github.com/user-attachments/assets/0d949721-2895-48c6-ada2-6128a78f0193)
 
 **3. Truy cập vào tệp tin**
 
