@@ -1,8 +1,10 @@
-import { MyDropzone } from "./MyDropzone";
+import Dropzone from "react-dropzone";
+import MyDropzone from "./Myzone";
+import "./App.css";
 
 function App() {
   return (
-    <div>
+    <div className="container">
       <MyDropzone />
     </div>
   );
