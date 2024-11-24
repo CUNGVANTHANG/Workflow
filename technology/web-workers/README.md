@@ -1,50 +1,99 @@
-# React + TypeScript + Vite
+## Web workers
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Trường hợp không sử dụng web workers**. Ta có thể thấy khi bấm vào nút **Show Message** thì không active mà cần phải đợi in kết quả ra mới active được, do đang phải xử lý chức năng khác (xử lý động bộ)
 
-Currently, two official plugins are available:
+<img src="./gif/1.gif">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Trường hợp sử dụng web workers**. Xử lý bất đồng bộ, chức năng này đang hoạt động không ảnh hưởng tới các chức năng khác
 
-## Expanding the ESLint configuration
+<img src="./gif/2.gif">
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Code
 
-- Configure the top-level `parserOptions` property like this:
+**Luồng chức năng chính:**
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Main thread gửi số cần tính qua `worker.postMessage(NUMBER)`.
+
+2. Worker tính Fibonacci và gửi kết quả về.
+
+4. Main thread nhận kết quả qua sự kiện `worker.onmessage` và cập nhật giao diện.
+
+![image](https://github.com/user-attachments/assets/3c2a5ab0-ebb1-42e5-a8b6-b7e2bc9049a6)
+
+**Chi tiết hơn:**
+
+Ta có hàm tính toán fibonacci
+
+```tsx
+const fibonacci = (n: number): number => {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+};
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+và hàm hiển thị message khi bấm vào **Show Message**
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```tsx
+const handleNewButtonClick = () => {
+    setShowMessage(true);
+};
 ```
+
+- **Trường hợp không sử dụng web workers**
+
+```tsx
+ const calculateSync = () => {
+    setSyncLoadings((prev) => [...prev, true]); // Add loading
+    const start = performance.now();
+    const result = fibonacci(NUMBER);
+    const end = performance.now();
+    setFibSync((prev) => [...prev, result]);
+    setTimeSync((prev) => [...prev, end - start]);
+    setSyncLoadings((prev) => prev.slice(1)); // Remove loading
+};
+```
+
+Ta có thể thấy các tính toán được thực hiện đồng bộ
+
+- **Trường hợp sử dụng web workers**
+
+Thiết lập Web Worker trong `useEffect`
+
+```tsx
+useEffect(() => {
+    workerRef.current = new Worker(new URL("./fibWorker.js", import.meta.url));
+    workerRef.current.onmessage = (e) => {
+      const { result, time } = e.data;
+      setFibAsync((prev) => [...prev, result]);
+      setTimeAsync((prev) => [...prev, time]);
+      setAsyncLoadings((prev) => prev.slice(1)); // Remove loading
+    };
+    return () => {
+      workerRef.current?.terminate();
+    };
+}, []);
+```
+
+Yêu cầu worker tính toán Fibonacci
+
+```tsx
+const calculateAsync = () => {
+    setAsyncLoadings((prev) => [...prev, true]); // Add loading
+    workerRef.current?.postMessage(NUMBER);
+};
+```
+
+Tính giá trị Fibonacci của số n trong worker thread. Gửi kết quả và thời gian thực hiện về main thread.
+
+```tsx
+self.onmessage = (e) => {
+  const n = e.data;
+  const start = performance.now();
+  const result = fibonacci(n);
+  const end = performance.now();
+  self.postMessage({ result, time: end - start });
+};
+```
+
+
+
